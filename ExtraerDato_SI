@@ -1,0 +1,34 @@
+Function ExtraerDato_SI(Celda As Range, Delimitador As String, ParamArray Args() As Variant) As String
+
+    Dim partes() As String
+    Dim i As Long, j As Long
+    Dim encontrado As Boolean
+    Dim posicion As Long
+    
+    ' Validar número mínimo de argumentos
+    If UBound(Args) - LBound(Args) + 1 < 2 Then
+        ExtraerDato_SI = ""
+        Exit Function
+    End If
+    
+    ' Dividir el texto por el delimitador
+    partes = Split(Celda.Value, Delimitador)
+    
+    ' Buscar coincidencias en los argumentos
+    For i = LBound(Args) To UBound(Args) Step 2
+        ' Si es el último argumento y no tiene pareja (condición), salir
+        If i + 1 > UBound(Args) Then Exit For
+        
+        ' Verificar si la condición aparece EN CUALQUIER PARTE de la celda
+        If InStr(1, Celda.Value, CStr(Args(i + 1)), vbTextCompare) > 0 Then
+            ' Si se cumple, extrae la parte en la posición indicada
+            If Args(i) - 1 <= UBound(partes) Then
+                ExtraerDato_SI = Trim(partes(Args(i) - 1))
+                Exit Function
+            End If
+        End If
+    Next i
+    
+    ' Si no se encontró ninguna coincidencia
+    ExtraerDato_SI = "S/CONCIDENCIA"
+End Function
