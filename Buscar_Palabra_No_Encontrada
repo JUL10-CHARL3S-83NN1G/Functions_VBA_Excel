@@ -1,5 +1,5 @@
 Function BUSCAR_NoCoincidente(nombreBuscado As String, rangoBusqueda As Range, rangoResultado As Range) As String
-    Dim i As Long
+    Dim i As Long 
     Dim palabrasBuscado() As String
     Dim palabrasEncontrado() As String
     Dim coincidencias As Long
