@@ -1,0 +1,41 @@
+Function BuscarNombreFlexible(nombreBuscado As String, rangoBusqueda As Range, rangoResultado As Range) As String
+    Dim i As Long
+    Dim palabrasBuscado() As String
+    Dim palabrasEncontrado() As String
+    Dim coincidencias As Long
+    Dim palabraNoCoincidente As String
+    
+    palabrasBuscado = Split(UCase(nombreBuscado), " ")
+    
+    For i = 1 To rangoBusqueda.Rows.Count
+        If Not IsEmpty(rangoBusqueda.Cells(i, 1)) Then
+            palabrasEncontrado = Split(UCase(rangoBusqueda.Cells(i, 1).Value), " ")
+            coincidencias = 0
+            palabraNoCoincidente = ""
+            
+            Dim j As Long
+            For j = LBound(palabrasBuscado) To UBound(palabrasBuscado)
+                If j <= UBound(palabrasEncontrado) Then
+                    If palabrasBuscado(j) = palabrasEncontrado(j) Then
+                        coincidencias = coincidencias + 1
+                    Else
+                        palabraNoCoincidente = palabrasBuscado(j)
+                    End If
+                End If
+            Next j
+            
+            ' Si coincide todo excepto una palabra
+            If coincidencias = UBound(palabrasBuscado) Then
+                BuscarNombreFlexible = "Palabra no coincidente: " & palabraNoCoincidente
+                Exit Function
+            ' Si todas coinciden
+            ElseIf coincidencias = UBound(palabrasBuscado) + 1 Then
+                BuscarNombreFlexible = rangoResultado.Cells(i, 1).Value
+                Exit Function
+            End If
+        End If
+    Next i
+    
+    BuscarNombreFlexible = "No encontrado"
+End Function
+
