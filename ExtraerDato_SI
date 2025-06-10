@@ -10,7 +10,7 @@ Function ExtraerDato_SI(Celda As Range, Delimitador As String, ParamArray Args()
         ExtraerDato_SI = ""
         Exit Function
     End If
-    
+     
     ' Dividir el texto por el delimitador
     partes = Split(Celda.Value, Delimitador)
     
