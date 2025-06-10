@@ -1,5 +1,5 @@
 Function ExtraerDato_SI(Celda As Range, Delimitador As String, ParamArray Args() As Variant) As String
-
+ 
     Dim partes() As String
     Dim i As Long, j As Long
     Dim encontrado As Boolean
