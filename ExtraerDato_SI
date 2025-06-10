@@ -8,7 +8,7 @@ Function ExtraerDato_SI(Celda As Range, Delimitador As String, ParamArray Args()
     ' Validar número mínimo de argumentos
     If UBound(Args) - LBound(Args) + 1 < 2 Then
         ExtraerDato_SI = ""
-        Exit Function
+        Exit Function 
     End If
      
     ' Dividir el texto por el delimitador
