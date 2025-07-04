@@ -1,0 +1,60 @@
+Function ExtraerPatron(Celda As Range, Estructura As String) As String
+    Dim regex As Object
+    Dim matches As Object
+    Dim patron As String
+    Dim resultado As String
+    
+    ' Crear objeto de expresiones regulares
+    Set regex = CreateObject("VBScript.RegExp")
+    regex.Global = True
+    regex.IgnoreCase = True
+    
+    ' Convertir la estructura en un patrón de expresión regular
+    Select Case UCase(Estructura)
+        Case "F-XX-XXXXX", "F-NN-NNNNN" ' Folio
+            patron = "[A-Za-z]-\d{2}-\d{5}"
+            
+        Case "XX-XX-XXXX", "N-NN-NNNN", "DD-MM-AAAA" ' Fecha sin paréntesis
+            patron = "\d{2}-\d{2}-\d{4}"
+            
+        Case "(XX-XX-XXXX)", "(N-NN-NNNN)", "(DD-MM-AAAA)" ' Fecha con paréntesis
+            patron = "\(\d{2}-\d{2}-\d{4}\)"
+            
+        Case "XX-XX-XX", "DD-MM-AA" ' Fecha corta sin paréntesis
+            patron = "\d{2}-\d{2}-\d{2}"
+            
+        Case "(XX-XX-XX)", "(DD-MM-AA)" ' Fecha corta con paréntesis
+            patron = "\(\d{2}-\d{2}-\d{2}\)"
+            
+        Case Else
+            ' Si no reconoce la estructura, intenta interpretarla
+            patron = Estructura
+            patron = Replace(patron, "X", "\d")
+            patron = Replace(patron, "N", "\d")
+            patron = Replace(patron, "A", "[A-Za-z]")
+            patron = Replace(patron, "D", "\d")
+    End Select
+    
+    ' Configurar el patrón
+    regex.Pattern = patron
+    
+    ' Buscar coincidencias
+    If regex.Test(Celda.Value) Then
+        Set matches = regex.Execute(Celda.Value)
+        If matches.Count > 0 Then
+            resultado = matches(0).Value
+            
+            ' Caso especial: cuando se busca sin paréntesis pero el texto los tiene
+            If (Estructura Like "XX*" Or Estructura Like "DD*" Or Estructura Like "NN*") And _
+               Left(resultado, 1) = "(" And Right(resultado, 1) = ")" Then
+                resultado = Mid(resultado, 2, Len(resultado) - 2)
+            End If
+            
+            ExtraerPatron = resultado
+        Else
+            ExtraerPatron = "NO ENCONTRADO"
+        End If
+    Else
+        ExtraerPatron = "NO ENCONTRADO"
+    End If
+End Function
