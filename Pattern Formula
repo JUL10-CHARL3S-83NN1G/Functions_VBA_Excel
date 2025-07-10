@@ -25,7 +25,10 @@ Function ExtraerPatron(Celda As Range, Estructura As String) As String
             
         Case "(XX-XX-XX)", "(DD-MM-AA)" ' Fecha corta con paréntesis
             patron = "\(\d{2}-\d{2}-\d{2}\)"
-            
+
+        Case "AAA-XXX/XX" 'Volanta con estructura "VOL-000/00"
+            patron = "[A-Za-z]{3}-\d{3}/\d{2}"
+
         Case Else
             ' Si no reconoce la estructura, intenta interpretarla
             patron = Estructura
